@@ -1,0 +1,25 @@
+version: "3.3"
+
+services:
+  backend:
+    build: ./backend
+    container_name: tp-backend-chat
+    ports:
+      - "3000:3000"
+    networks:
+      - webnet
+
+  frontend:
+    build: ./frontend
+    container_name: tp-frontend-chat
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    networks:
+      - webnet
+
+networks:
+  webnet:
+    driver: bridge
+
