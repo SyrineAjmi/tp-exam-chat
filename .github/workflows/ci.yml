@@ -25,8 +25,8 @@ jobs:
 
       - name: Build Docker Images
         run: |
-          docker build -t tp-backend ./backend-chat
-          docker build -t tp-frontend ./frontend-chat
+          docker build -t tp-backend ./backend
+          docker build -t tp-frontend ./frontend
 
       - name: Start services
         run: docker-compose up -d
