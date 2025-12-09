@@ -1,4 +1,4 @@
-name: CI - Build & Test 
+name: CI - Build & Test
 
 on:
   push:
@@ -23,26 +23,22 @@ jobs:
           sudo chmod +x /usr/local/bin/docker-compose
           docker-compose --version
 
-      - name: Build and start services
-        run: docker-compose up --build -d
-
-      - name: Wait for backend to be healthy
+      - name: Build Docker Images
         run: |
-          echo "Attente du backend (max 60s)..."
-          SECONDS=0
-          while [ "$(docker inspect --format='{{.State.Health.Status}}' tp-backend-chat)" != "healthy" ]; do
-            if [ $SECONDS -ge 60 ]; then
-              echo "Timeout : backend non démarré"
-              docker-compose logs tp-backend-chat
-              exit 1
-            fi
-            echo "En attente du backend... ($SECONDS s)"
-            sleep 2
-          done
-          echo "Backend est prêt !"
+          docker build -t tp-backend ./backend
+          docker build -t tp-frontend ./frontend
+
+      - name: Start services
+        run: docker-compose up -d
+
+      - name: Wait a few seconds
+        run: sleep 10  # simple pause pour que le backend démarre
 
       - name: Test API Endpoint
-        run: curl -f http://localhost:3000/api/messages
+        run: curl -f http://localhost:3000/api/messages || exit 1
+
+      - name: Test Frontend
+        run: curl -f http://localhost:8080/ || exit 1
 
       - name: Show logs on failure
         if: failure()
