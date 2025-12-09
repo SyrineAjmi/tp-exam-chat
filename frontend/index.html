@@ -22,7 +22,10 @@
 //const DEFAULT_BACKEND = "http://tp-backend-chat:3000/api/messages";
 //const PROD_BACKEND = "https://TON_BACKEND_PUBLIC.onrender.com/api/messages"; 
 //const API_URL = window.location.hostname === "localhost" ? DEFAULT_BACKEND : PROD_BACKEND;
-const API_URL = "http://localhost:3000/api/messages";
+const API_URL = window.location.hostname === "localhost"
+  ? "http://localhost:3000/api/messages"
+  : "https://TON_BACKEND_PUBLIC.onrender.com/api/messages";
+
 async function fetchMessages() {
   try {
     const res = await fetch(API_URL);

@@ -8,6 +8,10 @@ services:
       - "3000:3000"
     networks:
       - webnet
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/api || exit 1"]
+      interval: 5s
+      retries: 12
 
   frontend:
     build: ./frontend
